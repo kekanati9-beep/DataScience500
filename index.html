@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DSC500 — Notes &amp; Quiz, Chapters 1–4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #EEF0EA; --bg-2: #F7F8F4; --card: #FFFFFF; --ink: #182019; --ink-soft: #4B564D; --ink-faint: #7D887E;
+  --line: #D6DACE; --teal: #1F5D50; --teal-deep: #123B33; --teal-tint: #E1EEE9;
+  --amber: #C97F2E; --amber-tint: #F7E9D6; --coral: #B4472F; --coral-tint: #F5E1DB;
+  --radius: 14px; --serif: "IBM Plex Sans", sans-serif; --mono: "IBM Plex Mono", monospace;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: border-box;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12140F; --bg-2: #191C15; --card: #1E221A; --ink: #EDEFE8; --ink-soft: #B7BDAE; --ink-faint: #838B7B;
+    --line: #333A2C; --teal: #6FBFA8; --teal-deep: #A6E1CE; --teal-tint: #1C332C;
+    --amber: #E3A455; --amber-tint: #332818; --coral: #E08D71; --coral-tint: #33211B;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12140F; --bg-2: #191C15; --card: #1E221A; --ink: #EDEFE8; --ink-soft: #B7BDAE; --ink-faint: #838B7B;
+  --line: #333A2C; --teal: #6FBFA8; --teal-deep: #A6E1CE; --teal-tint: #1C332C;
+  --amber: #E3A455; --amber-tint: #332818; --coral: #E08D71; --coral-tint: #33211B;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 24px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif); line-height: 1.6; font-size: 16px; }
+h1,h2,h3 { font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.hero { border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), var(--bg)); padding: 48px 0 32px; }
+.hero .kicker { font-size: 14px; color: var(--teal); font-weight: 500; margin-bottom: 10px; }
+.hero h1 { font-size: clamp(26px, 3.6vw, 38px); max-width: 22ch; }
+.hero p { color: var(--ink-soft); max-width: 60ch; font-size: 16px; margin-top: 12px; }
+.progress-shell { margin-top: 24px; max-width: 420px; height: 8px; border-radius: 5px; background: var(--line); overflow: hidden; }
+#hero-progress-bar { height: 100%; width: 0%; background: var(--teal); transition: width .4s ease; border-radius: 5px; }
+.progress-caption { font-size: 13px; color: var(--ink-faint); margin-top: 8px; }
+.hero-controls { display: flex; align-items: center; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
+.mode-select { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+.mode-btn { border: none; background: transparent; font-family: var(--serif); font-size: 13px; font-weight: 500; color: var(--ink-soft); padding: 7px 16px; border-radius: 999px; cursor: pointer; }
+.mode-btn.active { background: var(--teal); color: var(--bg-2); }
+.reset-btn { border: 1px solid var(--coral); background: var(--coral-tint); color: var(--coral); font-family: var(--serif); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+.reset-btn:hover { background: var(--coral); color: var(--bg-2); }
+.mode-note { font-size: 12.5px; color: var(--ink-faint); width: 100%; }
+.easy-flag { font-size: 11.5px; font-weight: 500; color: var(--teal); margin-left: 8px; }
+.grade-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 999px; background: var(--teal-tint); color: var(--teal-deep); border: 1px solid var(--teal); }
+.grade-letter { font-family: var(--mono); font-weight: 700; }
+.chapter-grade { font-weight: 600; color: var(--teal-deep); }
+
+.layout { display: grid; grid-template-columns: 220px 1fr; gap: 36px; padding: 36px 0 90px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+nav.toc { position: sticky; top: 20px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+nav.toc a { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink-soft); font-size: 13.5px; padding: 9px 0 9px 15px; margin-left: -2px; border-left: 2px solid transparent; }
+nav.toc a.active { color: var(--teal-deep); border-left-color: var(--teal); font-weight: 500; }
+.toc-check { width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid var(--line); flex: none; display: flex; align-items: center; justify-content: center; font-size: 9.5px; color: transparent; }
+.toc-check.done { background: var(--teal); border-color: var(--teal); color: var(--bg-2); }
+@media (max-width: 860px) { nav.toc { position: static; } nav.toc ol { display: flex; flex-wrap: wrap; border-left: none; gap: 4px 14px; } nav.toc a { padding: 6px 0; border-left: none; } }
+
+main { min-width: 0; }
+section.chapter { padding-bottom: 60px; margin-bottom: 60px; border-bottom: 1px solid var(--line); scroll-margin-top: 20px; }
+section.chapter:last-child { border-bottom: none; }
+.chapter-eyebrow { font-size: 13px; color: var(--teal); font-weight: 500; margin-bottom: 6px; }
+.chapter h2 { font-size: 25px; }
+.subhead { font-size: 17px; font-weight: 600; margin: 26px 0 10px; }
+p.body-text { max-width: 68ch; }
+p.body-text + p.body-text { margin-top: 8px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin: 14px 0; }
+ul.notes-list { margin: 8px 0 0; padding-left: 20px; }
+ul.notes-list li { margin-bottom: 6px; }
+table.data-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+table.data-table th, table.data-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+table.data-table th { color: var(--ink-faint); font-weight: 500; font-size: 12.5px; }
+pre.code-block { background: var(--teal-deep); color: #DDEEE7; border-radius: var(--radius); padding: 16px 18px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.6; margin: 14px 0; }
+pre.code-block .cm { color: #7FA89B; } pre.code-block .kw { color: #E3A455; } pre.code-block .st { color: #E6C88A; }
+
+.exercise { background: var(--amber-tint); border: 1px solid var(--amber); border-radius: var(--radius); padding: 20px 22px; margin-top: 28px; }
+.exercise-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.exercise-head h3 { font-size: 15.5px; }
+.exercise-tag { font-size: 12px; font-weight: 500; color: var(--amber); }
+.q-block { margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--amber); }
+.q-block:first-of-type { border-top: none; padding-top: 0; }
+.q-prompt { font-weight: 500; margin-bottom: 9px; font-size: 14.5px; }
+.q-options { display: flex; flex-direction: column; gap: 7px; }
+.q-option { text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 9px; padding: 9px 13px; font-size: 14px; font-family: var(--serif); color: var(--ink); cursor: pointer; }
+.q-option:hover { border-color: var(--amber); }
+.q-option.correct { background: var(--teal-tint); border-color: var(--teal); color: var(--teal-deep); font-weight: 500; }
+.q-option.incorrect { background: var(--coral-tint); border-color: var(--coral); color: var(--coral); }
+.q-option[disabled] { cursor: default; }
+.q-feedback { font-size: 13px; margin-top: 7px; color: var(--ink-soft); min-height: 1.2em; }
+.exercise-score { font-size: 13.5px; color: var(--ink-soft); margin-top: 16px; }
+.exercise-score strong { color: var(--teal-deep); }
+footer { border-top: 1px solid var(--line); padding: 24px 0 44px; }
+footer p { color: var(--ink-faint); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">DSC500 — chapters 1–4</div>
+    <h1>Notes and a 10-question quiz for every chapter</h1>
+    <p>Introduction to Data Science, Types of Data &amp; Basic Libraries, the Five Steps of Data Science, and Data Visualisation using Matplotlib — with 40 questions total to test yourself against.</p>
+    <div class="progress-shell"><div id="hero-progress-bar"></div></div>
+    <div class="progress-caption" id="hero-progress-caption">0 of 40 answered correctly. Progress is saved on this device.</div>
+    <div class="grade-badge" id="hero-grade" style="margin-top:10px;"><span id="hero-grade-prefix">Grade so far:</span> <span class="grade-letter" id="hero-grade-letter">&mdash;</span></div>
+    <div class="hero-controls">
+      <div class="mode-select" role="group" aria-label="Difficulty">
+        <button type="button" class="mode-btn" data-mode="easy">Easy</button>
+        <button type="button" class="mode-btn" data-mode="medium">Medium</button>
+        <button type="button" class="mode-btn" data-mode="hard">Hard</button>
+      </div>
+      <button type="button" class="reset-btn" id="reset-btn">Reset progress</button>
+      <div class="mode-note" id="mode-note"></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="toc" aria-label="Chapters">
+    <ol>
+      <li><a href="#ch1" class="toc-link"><span class="toc-check" id="tc-1"></span>1. Introduction to data science</a></li>
+      <li><a href="#ch2" class="toc-link"><span class="toc-check" id="tc-2"></span>2. Types of data &amp; libraries</a></li>
+      <li><a href="#ch3" class="toc-link"><span class="toc-check" id="tc-3"></span>3. Five steps of data science</a></li>
+      <li><a href="#ch4" class="toc-link"><span class="toc-check" id="tc-4"></span>4. Visualisation with Matplotlib</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- CHAPTER 1 -->
+    <section class="chapter" id="ch1">
+      <div class="chapter-eyebrow">Chapter 1</div>
+      <h2>Introduction to Data Science</h2>
+
+      <div class="subhead">What &amp; why</div>
+      <p class="body-text"><strong>Data Science</strong> is an interdisciplinary field that extracts valuable insights and knowledge from data by combining statistics, computer science, mathematics, and domain expertise.</p>
+      <p class="body-text"><strong>Why it exists:</strong> traditional analysis methods fail on modern data because of its massive volume, speed, and unstructured/diverse nature — more than a human can process manually.</p>
+
+      <div class="subhead">The Data Science Venn Diagram (Drew Conway)</div>
+      <table class="data-table">
+        <tr><th>Circle</th><th>Covers</th></tr>
+        <tr><td>Hacking skills</td><td>Programming (Python/R), database management, data manipulation</td></tr>
+        <tr><td>Math &amp; statistics</td><td>Probability theory, statistical analysis, modelling</td></tr>
+        <tr><td>Substantive expertise</td><td>Domain/business knowledge used to frame questions and interpret results</td></tr>
+      </table>
+      <table class="data-table">
+        <tr><th>Overlap</th><th>Result</th></tr>
+        <tr><td>Hacking + Math</td><td>Machine Learning</td></tr>
+        <tr><td>Math + Domain</td><td>Traditional Research</td></tr>
+        <tr><td>Hacking + Domain</td><td>Danger Zone — lacks statistical rigor</td></tr>
+        <tr><td>All three</td><td>Data Science</td></tr>
+      </table>
+
+      <div class="subhead">Introduction to Python</div>
+      <p class="body-text">A versatile language favoured for its clean syntax and rich library ecosystem (via standard tools or the Anaconda distribution).</p>
+      <ul class="notes-list">
+        <li><strong>Basics:</strong> <code>#</code> starts a comment; variable names are case-sensitive (<code>Age</code> and <code>age</code> are different variables) with automatic type inference.</li>
+        <li><strong>Control flow:</strong> conditionals (<code>if</code>, <code>elif</code>, <code>else</code>) and loops (<code>for</code>, <code>while</code>).</li>
+        <li><strong>Data structures:</strong> Lists (ordered, mutable), Tuples (ordered, immutable), Dictionaries (key–value pairs), Sets (unordered, unique elements).</li>
+        <li><strong>Functions:</strong> reusable blocks of code defined with <code>def</code>.</li>
+      </ul>
+      <pre class="code-block"><span class="cm"># comments, case-sensitive names, data structures</span>
+Age = 21
+age = 34  <span class="cm"># a different variable to Age</span>
+
+fruits_list  = [<span class="st">"apple"</span>, <span class="st">"pear"</span>]      <span class="cm"># ordered, mutable</span>
+coords_tuple = (10, 20)               <span class="cm"># ordered, immutable</span>
+student_dict = {<span class="st">"name"</span>: <span class="st">"Zanele"</span>, <span class="st">"age"</span>: 21}
+unique_set   = {1, 2, 2, 3}            <span class="cm"># {1, 2, 3}</span>
+
+<span class="kw">def</span> greet(name):
+    <span class="kw">if</span> name:
+        <span class="kw">return</span> <span class="st">f"Hello, {name}!"</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="st">"Hello!"</span></pre>
+
+      <div class="exercise" data-chapter="1">
+        <div class="exercise-head"><h3>Quiz</h3><span class="exercise-tag">10 questions</span></div>
+        <div class="q-list"></div>
+        <div class="exercise-score"></div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2 -->
+    <section class="chapter" id="ch2">
+      <div class="chapter-eyebrow">Chapter 2</div>
+      <h2>Types of Data &amp; Basic Libraries</h2>
+
+      <div class="subhead">Structured vs. unstructured data</div>
+      <table class="data-table">
+        <tr><th>Structured</th><th>Unstructured</th></tr>
+        <tr><td>Predefined schema, tabular rows/columns</td><td>No predefined model or schema</td></tr>
+        <tr><td>Easily queried</td><td>Needs specialised tools (e.g. NLP)</td></tr>
+        <tr><td>e.g. CSV files, SQL databases, Excel</td><td>e.g. text documents, images, video, audio, social posts</td></tr>
+      </table>
+
+      <div class="subhead">Quantitative vs. qualitative data</div>
+      <p class="body-text"><strong>Quantitative</strong> — numerical quantities where mathematical operations are possible, collected via surveys or experiments. <strong>Qualitative</strong> — descriptive information categorised by language or characteristics rather than numbers, collected via interviews or observations.</p>
+
+      <div class="subhead">Four levels of data measurement</div>
+      <table class="data-table">
+        <tr><th>Level</th><th>Meaning</th><th>Example</th></tr>
+        <tr><td>Nominal</td><td>Named categories, no natural order</td><td>Gender, nationality</td></tr>
+        <tr><td>Ordinal</td><td>Rank order, but differences aren't measurable</td><td>Product ratings, satisfaction scales</td></tr>
+        <tr><td>Interval</td><td>Differences are meaningful, no true zero</td><td>Temperature (°C/°F)</td></tr>
+        <tr><td>Ratio</td><td>Order + meaningful difference + multiply/divide, has an absolute zero</td><td>Height, weight, sales revenue</td></tr>
+      </table>
+
+      <div class="subhead">Descriptive statistics with NumPy</div>
+      <p class="body-text">NumPy is the fundamental package for scientific computing in Python, built around the N-dimensional array (<code>ndarray</code>), supporting efficient vectorisation, broadcasting, and matrix operations.</p>
+      <ul class="notes-list">
+        <li><strong>Central tendency:</strong> mean, median, mode — identifying typical values.</li>
+        <li><strong>Spread:</strong> range, variance, standard deviation — standard deviation is the average distance data points lie from the mean.</li>
+      </ul>
+
+      <div class="subhead">Introduction to Pandas</div>
+      <p class="body-text">An open-source data manipulation and cleaning library built on top of NumPy. Core structures: the <strong>Series</strong> (a 1D labelled array/column) and the <strong>DataFrame</strong> (a 2D labelled, spreadsheet-like structure).</p>
+
+      <div class="exercise" data-chapter="2">
+        <div class="exercise-head"><h3>Quiz</h3><span class="exercise-tag">10 questions</span></div>
+        <div class="q-list"></div>
+        <div class="exercise-score"></div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 3 -->
+    <section class="chapter" id="ch3">
+      <div class="chapter-eyebrow">Chapter 3</div>
+      <h2>Five Steps of Data Science</h2>
+
+      <table class="data-table">
+        <tr><th>Step</th><th>What it involves</th></tr>
+        <tr><td>1. Ask an interesting question</td><td>Curiosity-driven formulation of problems that dictate the value of the final insights</td></tr>
+        <tr><td>2. Obtain the data</td><td>Gathering data from public databases, surveys, sensors, or web sources</td></tr>
+        <tr><td>3. Explore the data</td><td>Examining structure, identifying row/column types, handling missing values, managing duplicates and outliers using Pandas</td></tr>
+        <tr><td>4. Model the data</td><td>Applying statistical or machine learning techniques to test hypotheses and uncover predictive patterns</td></tr>
+        <tr><td>5. Communicate &amp; visualise results</td><td>Translating technical findings into clear narratives and charts for stakeholders</td></tr>
+      </table>
+
+      <div class="subhead">Pandas data operations</div>
+      <ul class="notes-list">
+        <li><strong>Inspection:</strong> <code>df.head()</code>, <code>df.describe()</code>, <code>df.shape</code>, <code>df.isnull().sum()</code></li>
+        <li><strong>Manipulation &amp; cleaning:</strong> <code>df.dropna()</code>, <code>df.fillna()</code>, <code>df.drop_duplicates()</code>, adding columns, conditional/boolean filtering</li>
+        <li><strong>Aggregation:</strong> <code>df.groupby().mean()</code> to summarise subsets of data</li>
+      </ul>
+      <pre class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="st">"sales.csv"</span>)
+df.head()                       <span class="cm"># peek at the data</span>
+df.isnull().sum()               <span class="cm"># count missing values per column</span>
+df = df.dropna()                <span class="cm"># drop rows with missing data</span>
+df = df.drop_duplicates()
+high_sales = df[df[<span class="st">"Revenue"</span>] &gt; 1000]   <span class="cm"># boolean filter</span>
+df.groupby(<span class="st">"Region"</span>)[<span class="st">"Revenue"</span>].mean()  <span class="cm"># aggregate</span></pre>
+
+      <div class="exercise" data-chapter="3">
+        <div class="exercise-head"><h3>Quiz</h3><span class="exercise-tag">10 questions</span></div>
+        <div class="q-list"></div>
+        <div class="exercise-score"></div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4 -->
+    <section class="chapter" id="ch4">
+      <div class="chapter-eyebrow">Chapter 4</div>
+      <h2>Data Visualisation using Matplotlib</h2>
+
+      <p class="body-text">Matplotlib is an open-source plotting library providing both a procedural interface (<code>pyplot</code>) and an object-oriented interface.</p>
+
+      <div class="subhead">Visual hierarchy</div>
+      <table class="data-table">
+        <tr><th>Term</th><th>Meaning</th></tr>
+        <tr><td>Figure</td><td>The top-level container — the window/page holding all plot elements</td></tr>
+        <tr><td>Axes</td><td>The actual plot area — data space, ticks and labels</td></tr>
+        <tr><td>Subplots</td><td>A grid of multiple Axes within a single Figure</td></tr>
+      </table>
+
+      <div class="subhead">Core plot types</div>
+      <table class="data-table">
+        <tr><th>Type</th><th>Function</th><th>Best for</th></tr>
+        <tr><td>Line plot</td><td><code>plt.plot()</code></td><td>Trends over time / sequential data</td></tr>
+        <tr><td>Bar chart</td><td><code>plt.bar()</code></td><td>Comparing discrete categories or frequency distributions</td></tr>
+        <tr><td>Scatter plot</td><td><code>plt.scatter()</code></td><td>Relationships/correlations between two continuous variables</td></tr>
+      </table>
+
+      <div class="subhead">Customisation</div>
+      <p class="body-text">Colours, markers, line styles, titles, axis labels (<code>set_xlabel</code>, <code>set_ylabel</code>), legends, grids, and layout adjustments (<code>plt.tight_layout()</code>) to prevent overlapping elements.</p>
+
+      <div class="exercise" data-chapter="4">
+        <div class="exercise-head"><h3>Quiz</h3><span class="exercise-tag">10 questions</span></div>
+        <div class="q-list"></div>
+        <div class="exercise-score"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer><div class="wrap"><p>DSC500 notes and quiz — Chapters 1–4, 40 questions total.</p></div></footer>
+
+<script>
+(function () {
+  "use strict";
+  var STORAGE_KEY = "dsc500-notes-quiz-progress";
+  var MODE_KEY = "dsc500-notes-quiz-mode";
+  function loadProgress() { try { var r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch (e) { return {}; } }
+  function saveProgress(p) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {} }
+  function loadMode() { try { return localStorage.getItem(MODE_KEY) || "medium"; } catch (e) { return "medium"; } }
+  function saveMode(m) { try { localStorage.setItem(MODE_KEY, m); } catch (e) {} }
+  var progress = loadProgress();
+  var currentMode = loadMode();
+  var TOTAL_Q = 40;
+  var MODE_NOTES = {
+    easy: "Easy: 3 answer choices per question, one wrong option removed, full explanations shown.",
+    medium: "Medium: all 4 answer choices, full explanations shown.",
+    hard: "Hard: all 4 answer choices in random order, no explanation \u2014 just right or wrong."
+  };
+
+  function getGrade(pct) {
+    if (pct >= 80) return { letter: "A", label: "Distinction" };
+    if (pct >= 70) return { letter: "B", label: "Merit" };
+    if (pct >= 60) return { letter: "C", label: "Credit" };
+    if (pct >= 50) return { letter: "D", label: "Pass" };
+    return { letter: "F", label: "Fail" };
+  }
+
+  function updateHeroProgress() {
+    var correctTotal = 0;
+    var completedChapters = 0;
+    [1,2,3,4].forEach(function (n) { if (progress[n]) { correctTotal += progress[n].score || 0; completedChapters++; } });
+    var pct = Math.round((correctTotal / TOTAL_Q) * 100);
+    document.getElementById("hero-progress-bar").style.width = pct + "%";
+    document.getElementById("hero-progress-caption").textContent = correctTotal + " of " + TOTAL_Q + " answered correctly. Progress is saved on this device.";
+    [1,2,3,4].forEach(function (n) {
+      var el = document.getElementById("tc-" + n);
+      if (progress[n] && progress[n].completed) { el.classList.add("done"); el.textContent = "\u2713"; }
+      else { el.classList.remove("done"); el.textContent = ""; }
+    });
+    var prefixEl = document.getElementById("hero-grade-prefix");
+    var letterEl = document.getElementById("hero-grade-letter");
+    if (completedChapters === 0) {
+      prefixEl.textContent = "Grade:";
+      letterEl.textContent = "\u2014 complete a chapter to see your grade";
+    } else {
+      var attempted = completedChapters * 10;
+      var attemptPct = Math.round((correctTotal / attempted) * 100);
+      var g = getGrade(attemptPct);
+      prefixEl.textContent = completedChapters === 4 ? "Overall grade:" : "Grade so far:";
+      letterEl.textContent = g.letter + " (" + attemptPct + "%) \u00b7 " + g.label;
+    }
+  }
+
+  var links = Array.prototype.slice.call(document.querySelectorAll(".toc-link"));
+  var sections = links.map(function (l) { return document.querySelector(l.getAttribute("href")); });
+  function onScroll() {
+    var pos = window.scrollY + 120, current = 0;
+    sections.forEach(function (s, i) { if (s.offsetTop <= pos) current = i; });
+    links.forEach(function (l, i) { l.classList.toggle("active", i === current); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  var quizData = {
+    1: [
+      { q: "Data Science is best described as:", opts: ["Pure statistics", "An interdisciplinary field combining statistics, computer science, math and domain expertise", "A single programming language", "A type of database"], correct: 1, fb: "It blends stats, CS, math and domain expertise." },
+      { q: "Why do traditional analysis methods struggle with modern data?", opts: ["Modern data is too accurate", "Its massive volume, speed and unstructured/diverse nature exceed manual processing", "There isn't enough data", "Computers can't store numbers"], correct: 1, fb: "Volume, velocity and variety are more than a human can process by hand." },
+      { q: "In Conway's Venn diagram, which circle covers programming and database management?", opts: ["Math & Statistics", "Substantive Expertise", "Hacking Skills", "Data Engineering"], correct: 2, fb: "Hacking Skills covers programming (Python/R), databases and data manipulation." },
+      { q: "What does the Math & Statistics circle cover?", opts: ["Domain knowledge", "Probability theory, statistical analysis and modelling", "Web scraping", "Chart design"], correct: 1, fb: "It covers probability, statistical analysis and modelling." },
+      { q: "Substantive expertise is used to:", opts: ["Write faster code", "Frame relevant questions and interpret results", "Reduce data volume", "Design databases"], correct: 1, fb: "Domain knowledge frames good questions and correct interpretation of results." },
+      { q: "Hacking Skills + Math & Statistics (without domain expertise) corresponds to:", opts: ["Traditional Research", "Danger Zone", "Machine Learning", "Data Science"], correct: 2, fb: "This overlap is Machine Learning." },
+      { q: "Math & Statistics + Substantive Expertise (without hacking skills) corresponds to:", opts: ["Machine Learning", "Traditional Research", "Danger Zone", "Business Intelligence"], correct: 1, fb: "This overlap is Traditional Research." },
+      { q: "Hacking Skills + Substantive Expertise without statistical rigor is called:", opts: ["Data Science", "Machine Learning", "Danger Zone", "Traditional Research"], correct: 2, fb: "Without statistics you risk mistaking noise for a real pattern — the Danger Zone." },
+      { q: "In Python, which of these is true about variable naming?", opts: ["Variables are case-insensitive", "\u201cAge\u201d and \u201cage\u201d refer to the same variable", "Python is case-sensitive, so \u201cAge\u201d and \u201cage\u201d are different variables", "Variable names auto-capitalise"], correct: 2, fb: "Python is case-sensitive, so Age and age are two different variables." },
+      { q: "Which Python data structure is ordered but immutable?", opts: ["List", "Tuple", "Dictionary", "Set"], correct: 1, fb: "A Tuple is ordered but cannot be changed after creation." }
+    ],
+    2: [
+      { q: "Structured data is best described as:", opts: ["Free-form text with no schema", "Organised into a predefined schema/tabular format", "Only found in images", "Impossible to query"], correct: 1, fb: "Structured data fits a predefined schema of rows and columns." },
+      { q: "Which of these is an example of unstructured data?", opts: ["A SQL database table", "A CSV file", "A social media post", "An Excel spreadsheet"], correct: 2, fb: "Text like a social media post has no predefined schema." },
+      { q: "Which library is the fundamental package for scientific computing, built around the ndarray?", opts: ["Pandas", "NumPy", "Matplotlib", "BeautifulSoup"], correct: 1, fb: "NumPy is built around the N-dimensional array (ndarray)." },
+      { q: "Quantitative data is:", opts: ["Descriptive characteristics expressed in language", "Numerical quantities where mathematical operations are possible", "Always categorical", "Only collected via interviews"], correct: 1, fb: "Quantitative data is numeric, so math operations apply." },
+      { q: "Qualitative data is typically collected via:", opts: ["Sensors only", "Interviews and observations", "Mathematical formulas", "Random number generation"], correct: 1, fb: "Qualitative data comes from interviews, observations and similar descriptive methods." },
+      { q: "Which level of measurement has no natural order (e.g. gender, nationality)?", opts: ["Ordinal", "Interval", "Nominal", "Ratio"], correct: 2, fb: "Nominal data is named categories with no inherent order." },
+      { q: "Which level of measurement gives a rank order, but differences aren't mathematically meaningful (e.g. satisfaction scales)?", opts: ["Nominal", "Ordinal", "Interval", "Ratio"], correct: 1, fb: "Ordinal data can be ranked, but the gaps between ranks aren't measurable." },
+      { q: "Temperature in Celsius is an example of which level of measurement?", opts: ["Nominal", "Ordinal", "Interval", "Ratio"], correct: 2, fb: "Interval data has meaningful differences but no true zero — 0°C isn't \u201cno temperature.\u201d" },
+      { q: "Which level of measurement has an absolute zero, allowing multiplication and division (e.g. weight, sales revenue)?", opts: ["Nominal", "Ordinal", "Interval", "Ratio"], correct: 3, fb: "Ratio data has a true zero, so 20kg really is twice 10kg." },
+      { q: "In Pandas, which structure is a 2D labelled, spreadsheet-like table?", opts: ["Series", "ndarray", "DataFrame", "Index"], correct: 2, fb: "A DataFrame is the 2D labelled structure; a Series is its 1D counterpart." }
+    ],
+    3: [
+      { q: "Which step of the five-step process is curiosity-driven problem formulation?", opts: ["Exploring the data", "Obtaining the data", "Asking an interesting question", "Modelling the data"], correct: 2, fb: "Step 1 is about formulating a question that dictates the value of the final insights." },
+      { q: "Step 2, Obtaining the Data, involves gathering data from:", opts: ["Only internal spreadsheets", "Public databases, surveys, sensors, or web sources", "Random number generators", "Only lab experiments"], correct: 1, fb: "Data can come from public databases, surveys, sensors or web sources." },
+      { q: "Step 3, Exploring the Data, involves:", opts: ["Only renaming columns", "Examining structure, identifying types, handling missing values, duplicates and outliers", "Publishing the final report", "Buying more data"], correct: 1, fb: "Exploring the data covers structure, types, missing values, duplicates and outliers." },
+      { q: "Step 4, Modelling the Data, involves:", opts: ["Formatting spreadsheets", "Applying statistical or ML techniques to test hypotheses and find predictive patterns", "Sending emails to stakeholders", "Deleting outliers only"], correct: 1, fb: "Modelling applies statistical/ML techniques to test hypotheses and find patterns." },
+      { q: "Step 5, Communicating and Visualising Results, involves:", opts: ["Keeping findings private", "Translating technical findings into clear narratives and charts for stakeholders", "Re-collecting the data", "Deleting the model"], correct: 1, fb: "The final step turns technical findings into narratives and charts stakeholders can use." },
+      { q: "Which Pandas method shows summary statistics (count, mean, std, etc.)?", opts: ["df.head()", "df.describe()", "df.shape", "df.dropna()"], correct: 1, fb: "df.describe() returns summary statistics for numeric columns." },
+      { q: "Which Pandas method returns the count of missing values per column?", opts: ["df.isnull().sum()", "df.fillna()", "df.groupby()", "df.head()"], correct: 0, fb: "df.isnull().sum() counts missing values in each column." },
+      { q: "Which Pandas method removes rows with missing values?", opts: ["df.fillna()", "df.dropna()", "df.drop_duplicates()", "df.describe()"], correct: 1, fb: "df.dropna() removes rows (or columns) containing missing values." },
+      { q: "Which Pandas method fills missing values with a specified value?", opts: ["df.fillna()", "df.dropna()", "df.isnull()", "df.shape"], correct: 0, fb: "df.fillna() replaces missing values with a value you choose." },
+      { q: "Which Pandas operation summarises subsets of data by category, e.g. the average per group?", opts: ["df.head()", "df.drop_duplicates()", "df.groupby().mean()", "df.isnull()"], correct: 2, fb: "df.groupby().mean() aggregates and averages values within each group." }
+    ],
+    4: [
+      { q: "Matplotlib is best described as:", opts: ["A data cleaning library", "An open-source plotting library with procedural (pyplot) and object-oriented interfaces", "A web scraping tool", "A machine learning framework"], correct: 1, fb: "Matplotlib offers both a procedural pyplot interface and an object-oriented one." },
+      { q: "Which term refers to the top-level container/window holding all plot elements?", opts: ["Figure", "Axes", "Subplot", "Legend"], correct: 0, fb: "The Figure is the overall window or page containing everything." },
+      { q: "Which term refers to the actual plot area containing the data space, ticks and labels?", opts: ["Figure", "Axes", "Canvas", "Grid"], correct: 1, fb: "The Axes is where the data itself is actually drawn." },
+      { q: "What are Subplots?", opts: ["A single line of code", "Grids of multiple Axes within a single Figure", "A type of legend", "A colour palette"], correct: 1, fb: "Subplots let you arrange several Axes in a grid inside one Figure." },
+      { q: "Which plot type is ideal for showing trends over time?", opts: ["Pie chart", "Line plot (plt.plot())", "Bar chart", "Scatter plot"], correct: 1, fb: "Line plots connect sequential points, ideal for trends over time." },
+      { q: "Which plot type is used for comparing discrete categorical values or frequency distributions?", opts: ["Line plot", "Bar chart (plt.bar())", "Scatter plot", "Histogram of residuals"], correct: 1, fb: "Bar charts compare values across discrete categories." },
+      { q: "Which plot type examines relationships or correlations between two continuous variables?", opts: ["Bar chart", "Line plot", "Scatter plot (plt.scatter())", "Pie chart"], correct: 2, fb: "Scatter plots reveal relationships between two continuous variables." },
+      { q: "Which function sets the x-axis label on an Axes object?", opts: ["set_ylabel()", "set_title()", "set_xlabel()", "legend()"], correct: 2, fb: "set_xlabel() labels the x-axis specifically." },
+      { q: "Which function automatically adjusts layout to prevent overlapping elements?", opts: ["plt.show()", "plt.tight_layout()", "plt.grid()", "plt.legend()"], correct: 1, fb: "plt.tight_layout() adjusts spacing so elements don't overlap." },
+      { q: "Besides labels and legends, what else can be customised on a Matplotlib plot?", opts: ["Only the title", "Only the file name", "Colours, markers, line styles and grids", "Nothing else"], correct: 2, fb: "Matplotlib lets you customise colours, markers, line styles, grids and more." }
+    ]
+  };
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function buildQuiz(exerciseEl, mode) {
+    var ch = exerciseEl.getAttribute("data-chapter");
+    var questions = quizData[ch];
+    var listEl = exerciseEl.querySelector(".q-list");
+    var scoreEl = exerciseEl.querySelector(".exercise-score");
+    listEl.innerHTML = "";
+    scoreEl.innerHTML = "";
+    var answered = new Array(questions.length).fill(false);
+    var correctCount = 0;
+
+    function updateScore() {
+      var doneCount = answered.filter(Boolean).length;
+      if (doneCount === questions.length) {
+        var chPct = Math.round((correctCount / questions.length) * 100);
+        var g = getGrade(chPct);
+        scoreEl.innerHTML = "Score: <strong>" + correctCount + " / " + questions.length + "</strong> \u2014 chapter complete. Grade: <span class=\"chapter-grade\">" + g.letter + " (" + chPct + "%) \u00b7 " + g.label + "</span>";
+        progress[ch] = { completed: true, score: correctCount };
+        saveProgress(progress);
+        updateHeroProgress();
+      } else {
+        scoreEl.innerHTML = "Score: <strong>" + correctCount + " / " + questions.length + "</strong> \u2014 " + (questions.length - doneCount) + " question(s) left.";
+      }
+    }
+
+    questions.forEach(function (item, qi) {
+      var qBlock = document.createElement("div");
+      qBlock.className = "q-block";
+      var prompt = document.createElement("div");
+      prompt.className = "q-prompt";
+      prompt.textContent = (qi + 1) + ". " + item.q;
+      if (mode === "easy") {
+        var flag = document.createElement("span");
+        flag.className = "easy-flag";
+        flag.textContent = "3 choices";
+        prompt.appendChild(flag);
+      }
+      var optsWrap = document.createElement("div");
+      optsWrap.className = "q-options";
+      var feedback = document.createElement("div");
+      feedback.className = "q-feedback";
+
+      var pool = item.opts.map(function (text, i) { return { text: text, isCorrect: i === item.correct }; });
+      if (mode === "easy") {
+        var wrongIdxs = [];
+        pool.forEach(function (o, i) { if (!o.isCorrect) wrongIdxs.push(i); });
+        var removeIdx = wrongIdxs[Math.floor(Math.random() * wrongIdxs.length)];
+        pool = pool.filter(function (_, i) { return i !== removeIdx; });
+      }
+      if (mode === "hard") {
+        pool = shuffle(pool);
+      }
+      var correctIndex = pool.findIndex(function (o) { return o.isCorrect; });
+
+      pool.forEach(function (opt, oi) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "q-option";
+        btn.textContent = opt.text;
+        btn.addEventListener("click", function () {
+          if (answered[qi]) return;
+          answered[qi] = true;
+          var buttons = optsWrap.querySelectorAll(".q-option");
+          buttons.forEach(function (b, bi) {
+            b.disabled = true;
+            if (bi === correctIndex) b.classList.add("correct");
+            else if (bi === oi) b.classList.add("incorrect");
+          });
+          if (oi === correctIndex) correctCount++;
+          if (mode === "hard") {
+            feedback.textContent = oi === correctIndex ? "Correct." : "Not quite.";
+          } else {
+            feedback.textContent = (oi === correctIndex ? "Correct. " : "Not quite. ") + item.fb;
+          }
+          updateScore();
+        });
+        optsWrap.appendChild(btn);
+      });
+
+      qBlock.appendChild(prompt);
+      qBlock.appendChild(optsWrap);
+      qBlock.appendChild(feedback);
+      listEl.appendChild(qBlock);
+    });
+
+    updateScore();
+  }
+
+  function renderAll(mode) {
+    document.querySelectorAll(".exercise").forEach(function (el) { buildQuiz(el, mode); });
+    updateHeroProgress();
+  }
+
+  function setModeButtonsActive(mode) {
+    document.querySelectorAll(".mode-btn").forEach(function (b) {
+      b.classList.toggle("active", b.getAttribute("data-mode") === mode);
+    });
+    document.getElementById("mode-note").textContent = MODE_NOTES[mode];
+  }
+
+  document.querySelectorAll(".mode-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var m = b.getAttribute("data-mode");
+      if (m === currentMode) return;
+      currentMode = m;
+      saveMode(currentMode);
+      setModeButtonsActive(currentMode);
+      progress = {};
+      saveProgress(progress);
+      renderAll(currentMode);
+    });
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", function () {
+    progress = {};
+    saveProgress(progress);
+    renderAll(currentMode);
+  });
+
+  setModeButtonsActive(currentMode);
+  renderAll(currentMode);
+})();
+</script>
+</body>
+</html>
